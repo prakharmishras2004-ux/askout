@@ -1,1 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal 💌</title>
+<style>
+  body {
+    margin:0; padding:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom, #ffe6f0, #fff0f5);
+    height:100vh; display:flex; justify-content:center; align-items:center;
+    overflow:hidden;
+    position: relative;
+  }
+  #envelope {
+    width:300px; height:180px;
+    background:#ffcccc; border-radius:12px;
+    display:flex; justify-content:center; align-items:center;
+    cursor:pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    transition: transform 0.5s ease;
+    font-size:4rem;
+    z-index:2;
+    position:relative;
+  }
+  #letterContainer {
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    width:90%; max-width:400px;
+    background: #fff0f5;
+    border-radius:10px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.2);
+    position: relative;
+    z-index:3;
+  }
+  #letterContent {
+    margin:10px 0;
+  }
+  #buttons {
+    margin-top:20px;
+  }
+  button {
+    padding:10px 20px;
+    margin:5px;
+    font-size:16px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    transition: transform 0.2s;
+  }
+  button:hover { transform: scale(1.1); }
+  #yesMessage, #noMessage {
+    margin-top:20px;
+    font-size:18px;
+    font-weight:bold;
+    color:#d63384;
+    display:none;
+    text-align:center;
+  }
+  #confettiCanvas {
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    pointer-events:none;
+    z-index:1;
+  }
+  /* Background Polaroid photos */
+  .bg-photo {
+    position:absolute;
+    width:120px;
+    height:160px;
+    object-fit:cover;
+    border-radius:10px;
+    box-shadow:0 6px 12px rgba(0,0,0,0.3);
+    z-index:1;
+    transition: transform 0.3s;
+  }
+</style>
+</head>
+<body>
 
+<div id="envelope">💌</div>
+
+<div id="letterContainer">
+  <div id="letterContent">
+    <p>Dear Cupcake,</p>
+    
+    <p>Let’s start off with this: I love you, heheheh. I really do. I write paragraphs because that’s one of my ways to show affection and that I care.</p>
+    
+    <p>I know I can’t reverse time or change the past, but I assure you that from now on, you will feel more loved, more pampered, and more cared about. I am sorry that people laughed and you had to go through that alone. You can trust me, and I promise to always be honest with you, to always listen, and to make sure you feel safe and valued. I want to be someone you can rely on no matter what, and someone who makes you smile even on tough days.</p>
+    
+    <p>Also, I have to be honest… waise toh top models are practically fighting to go on a date with me (I mean, literally, can’t keep up with all the DMs 😎), but honestly, none of them matter. Because even with all that, I only want you. You. The one who laughs at my jokes, who makes boring days exciting, and makes me feel loved.</p>
+    
+    <p>I love you more than I can put into words. Every little thing about you,your laugh, your thoughts,your eyes.Because of you i want to learn new things maybe in future cook breakfast for you or take you skiing or maybe just look into your eyes and feel at peace.</p>
+    
+    <p>So here I am, asking you again: Eshani Pandey, will you be my girlfriend?</p>
+  </div>
+
+  <div id="buttons">
+    <button id="yesBtn">Yes ✅</button>
+    <button id="noBtn">No ❌</button>
+  </div>
+
+  <div id="yesMessage">hehehehehehe lobeeeee hogaya hai aapko hamse! 💖 heheheheh I love you so much my baby girl! 😄</div>
+  <div id="noMessage">hehehehe option nahi, no matlab yes hi hai hehehehehe</div>
+</div>
+
+<canvas id="confettiCanvas"></canvas>
+
+<script>
+// Local image paths
+const bgPhotos = [
+  'photo1.jpeg',
+  'photo2.jpeg',
+  'photo3.jpeg',
+  'photo4.jpeg',
+  'photo5.jpeg',
+  'photo6.jpeg'
+];
+
+const envelope = document.getElementById('envelope');
+const letterContainer = document.getElementById('letterContainer');
+const yesBtn = document.getElementById('yesBtn');
+const yesMessage = document.getElementById('yesMessage');
+const noBtn = document.getElementById('noBtn');
+const noMessage = document.getElementById('noMessage');
+const confettiCanvas = document.getElementById('confettiCanvas');
+const body = document.body;
+
+// Envelope click → open letter & add background photos
+envelope.addEventListener('click', () => {
+  envelope.style.display = 'none';
+  letterContainer.style.display = 'flex';
+  // Add 6 photos behind letter
+  const leftX = 20;
+  const rightX = window.innerWidth - 150;
+  const startY = 50;
+  const gapY = 180;
+  bgPhotos.forEach((src,i)=>{
+    const img = document.createElement('img');
+    img.src = src;
+    img.className = 'bg-photo';
+    if(i<3){
+      img.style.left = `${leftX + Math.random()*30}px`;
+      img.style.top = `${startY + i*gapY + Math.random()*20}px`;
+    } else {
+      img.style.left = `${rightX + Math.random()*-30}px`;
+      img.style.top = `${startY + (i-3)*gapY + Math.random()*20}px`;
+    }
+    img.style.transform = `rotate(${Math.random()*30 - 15}deg)`;
+    body.appendChild(img);
+  });
+});
+
+// Yes button → show message + confetti
+yesBtn.addEventListener('click', () => {
+  yesMessage.style.display = 'block';
+  runConfetti();
+});
+
+// No button → show message only
+noBtn.addEventListener('click', () => {
+  noMessage.style.display = 'block';
+});
+
+// Confetti
+function runConfetti() {
+  const confetti = confettiCanvas.getContext('2d');
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+  const particles = [];
+  for(let i=0;i<150;i++){
+    particles.push({
+      x: Math.random()*confettiCanvas.width,
+      y: Math.random()*confettiCanvas.height,
+      r: Math.random()*6+4,
+      d: Math.random()*50+10,
+      color: `hsl(${Math.random()*360},100%,50%)`,
+      tilt: Math.random()*10-10
+    });
+  }
+  let angle = 0;
+  function draw(){
+    confetti.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    particles.forEach(p=>{
+      confetti.beginPath();
+      confetti.moveTo(p.x+ p.tilt + p.r/2,p.y);
+      confetti.lineTo(p.x + p.tilt,p.y + p.r);
+      confetti.strokeStyle=p.color;
+      confetti.lineWidth=p.r/2;
+      confetti.stroke();
+      p.y += Math.cos(angle + p.d) +1 + p.r/2;
+      p.x += Math.sin(angle);
+      if(p.y > confettiCanvas.height) p.y = -10;
+    });
+    angle +=0.01;
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+</script>
+
+</body>
+</html>
